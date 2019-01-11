@@ -1,0 +1,138 @@
+html {
+  height: 100%;
+}
+
+.wrapper {
+  display: flex;
+  min-height: 100%;
+}
+
+#content {
+  flex: 1;
+}
+
+.sidebar {
+  width: 80px;
+  background-color: #25272E;
+}
+
+.sidebar__logo::after {
+  content: "";
+  width: 100%;
+  height: 2px;
+  display: block;
+  background-color: #1D2028;
+  border-bottom: 1px solid #31343C;
+}
+
+.header {
+  height: 82px;
+  border-bottom: 1px solid #EEEEEE;
+  padding: 16px 22px;
+  color: #626262;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header__title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: normal;
+  line-height: normal;
+  font-size: 36px;
+}
+
+.header__parrots-count {
+  display: flex;
+}
+
+.header__parrots-count::before {
+  content: url('images/light-parrot.svg');
+  align-self: center;
+  margin-right: 10px;
+}
+
+/*Configurando o chat*/
+#chatPanel{
+  position:absolute;
+  overflow-y: scroll; 
+  overflow-x: hidden;
+  height:75%;
+  width: 95%;
+}
+
+.divChat{
+  position: relative;
+  width:93.5%;
+  height: 130px;
+  width:100%;
+  /*border:yellow solid;*/
+}
+
+.profilePhoto{
+  position: absolute;
+  top:14px;
+  left:1%;
+  border-radius:10px;
+  border: 1px solid;
+  height:74px;
+  width:74px;
+}
+
+.parrot{
+  position:absolute;
+  left:30%;
+}
+
+.name{
+  position:absolute;
+  left:9%;
+  top:0%;
+}
+
+.date{
+  position:absolute;
+  left: 20%;
+  top:0%;
+}
+
+.message{
+  position:absolute;
+  left: 8%;
+  bottom:1%;
+  height: 93px;
+  width: 92%;
+}
+
+/*Configurando o local em que o usuario digita a mensagem*/
+#mensagem_usuario{
+  position: fixed;
+  left:5%;
+  width:95%;
+  height:15%;
+  padding:25px;
+  background:#EFEFEF;
+  bottom:0%;
+}
+
+#imagem_usuario{
+  position: absolute;
+  left:3%;
+  top:20%;
+  height:80px;
+}
+
+#caixa_mensagem
+{
+  position: absolute;
+  width:80%;
+  left: 10%;
+  height:60%;
+  border-radius: 6px;
+  color:black;
+}
+
+#botao_enviar{
+  position: absolute;
+  left:92%;
+  padding-top:15px;
+}
