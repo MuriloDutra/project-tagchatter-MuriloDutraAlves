@@ -3,53 +3,53 @@
   //função que construirá uma div para cada mensagem que foi retornada de '/messages'
   function buildMessage(json)
   {
-    var panelOfMessages = document.getElementById("chatPanel");
+    var panelOfMessages = $("#chatPanel");
 
-    var divContent = document.createElement("div");
-    var photo = document.createElement("img");
-    var parrotImage = document.createElement("img");
-    var name = document.createElement("div");
-    var date = document.createElement("div");
-    var message = document.createElement("div");
+    var divContent = $("<div>");
+    var photo = $("<img>");
+    var parrotImage = $("<img>");
+    var name = $("<div>");
+    var date = $("<div>");
+    var message = $("<div>");
 
     //Definindo a class da DIV que terá todo o conteúdo: mensagem, nome, foto e etc.
-    divContent.classList.add("divChat"); 
-    divContent.id = json.id;
+    divContent.addClass("divChat"); 
+    divContent.attr("id", json.id);
 
     //atribuindo valor a imagem do usuario e definindo sua class
-    photo.setAttribute("src", json.author.avatar);
-    photo.classList.add("profilePhoto");
+    photo.attr("src", json.author.avatar);
+    photo.addClass("profilePhoto");
 
     /*definindo a class, src e name para imagem do parrot. Além disso, estou adicionando um evento de click, 
     para o parrot ser trocado*/
-    parrotImage.src = "images/parrot-grey.png"
-    parrotImage.classList.add("parrot");
-    parrotImage.name = "false";
-    parrotImage.addEventListener("click", function(){
-        parrotMessage(document.getElementById(json.id), parrotImage);
+    parrotImage.attr("src", "images/parrot-grey.png");
+    parrotImage.addClass("parrot");
+    parrotImage.attr("name", false);
+    parrotImage.click(function(){
+        parrotMessage($(json.id), parrotImage);
     });
       
     //atribuindo valor a DIV nome e definindo sua class
-    name.textContent = json.author.id;
-    name.classList.add("name");
+    name.text(json.author.id);
+    name.addClass("name");
 
     //atribuindo valor a DIV data e definindo sua class
-    date.textContent = json.created_at.substring(0, 10);
-    date.classList.add("date");
+    date.text(json.created_at.substring(0, 10));
+    date.addClass("date");
 
     //atribuindo valor a DIV mensagem e definindo sua class
-    message.textContent = json.content;
-    message.classList.add("message");
+    message.text(json.content);
+    message.addClass("message");
 
     //adicionando o conteudo a div onde aparece a mensagem e o restante
-    divContent.appendChild(photo);
-    divContent.appendChild(parrotImage);
-    divContent.appendChild(name);
-    divContent.appendChild(date);
-    divContent.appendChild(message);
+    divContent.append(photo);
+    divContent.append(parrotImage);
+    divContent.append(name);
+    divContent.append(date);
+    divContent.append(message);
 
     //adicionando a div ao painel de mensagens
-    panelOfMessages.appendChild(divContent);
+    panelOfMessages.append(divContent);
   }
 
   /*Essa pequena função tem o proposito de pegar a mensagem que o usuario escreveu, 
@@ -57,9 +57,10 @@
   que propriamente enviara a mensagem, que no caso é a function sendMessage().*/
   function getValueMessage()
   {
-    document.getElementById("botao_enviar").onclick = function(){
-      sendMessage(document.getElementById("caixa_mensagem").value, sessionStorage.getItem("idUsu"));
-    }
+    $("#botao_enviar").click(function(){
+      sendMessage($("#caixa_mensagem").val(), sessionStorage.getItem("idUsu"));
+      $("#caixa_mensagem").val('');
+    });
   }
 
   function fetchParrotsCount() 
@@ -69,7 +70,7 @@
         return response.json();
       })
       .then(function(count){
-        document.getElementById("parrots-counter").innerHTML = count;
+        $("#parrots-counter").text(count);
       });
   }
 
@@ -86,7 +87,7 @@
     )
     .then(function(messages)
     { 
-      document.getElementById("chatPanel").innerHTML = "";
+      $("#chatPanel").html('');
       for(i = 0; i < messages.length; i++)
       {
         buildMessage(messages[i]);
@@ -102,25 +103,24 @@
     var otherParam = {method:"PUT"};
     var url = "";
 
-    if(parrotImg.name == "false")
+    if(parrotImg.attr("name") == "false")
     {
-      parrotImg.name = "true";
-      parrotImg.src = "images/parrot.gif";
-      message.style = "background:#FFFAE7;";
+      parrotImg.attr("name", true);
+      parrotImg.attr("src", "images/parrot.gif");
+      message.css("background", "#FFFAE7");
 
       url = apiUrl + "/messages/" + message.id + "/parrot";
     }else
     {
-      parrotImg.name = "false";
-      parrotImg.src = "images/parrot-grey.png";
-      message.style = "background:#FFFFFF;";
+      parrotImg.attr("name", "false");
+      parrotImg.attr("src", "images/parrot-grey.png");
+      message.css("background", "#FFFFFF");
 
       url = apiUrl + "/messages/" + message.id + "/unparrot";
     }
 
     fetch(url, otherParam)
       .then(function(response){ 
-        console.log(response);
         fetchParrotsCount();
       })
       .catch(error => console.log("ERROR: " + error));
@@ -154,13 +154,13 @@
   {
     // Faz um request para pegar os dados do usuário atual
     // Exibe a foto do usuário atual na tela e armazena o seu ID para quando ele enviar uma mensagem
-    var imagem = document.getElementById("imagem_usuario")
+    var imagem = $("#imagem_usuario");
     var otherParam = {method:"GET"};
 
     fetch(apiUrl + "/me", otherParam)
       .then(response => response.json())
       .then(r => {
-        imagem.setAttribute("src",r.avatar);
+        imagem.attr("src",r.avatar);
         sessionStorage.setItem("idUsu", r.id);
       })
       .catch(error => console.log("ERROR: " + error))
