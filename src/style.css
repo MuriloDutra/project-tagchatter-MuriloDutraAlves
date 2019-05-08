@@ -52,12 +52,12 @@ html {
 }
 
 /*Configurando o chat*/
-#chatPanel{
-  position:absolute;
-  overflow-y: scroll; 
+#chatPanel {
+  position: fixed;
+  overflow-y: scroll;
   overflow-x: hidden;
-  height:75%;
-  width: 95%;
+  width: calc(100% - 80px);
+  height: calc(100% - 82px);
 }
 
 .divChat{
@@ -104,7 +104,7 @@ html {
 }
 
 /*Configurando o local em que o usuario digita a mensagem*/
-#mensagem_usuario{
+#user_message{
   position: fixed;
   left:5%;
   width:95%;
@@ -114,14 +114,16 @@ html {
   bottom:0%;
 }
 
-#imagem_usuario{
+#user_image{
   position: absolute;
-  left:3%;
+  left:1%;
   top:20%;
-  height:80px;
+  height:74px;
+  border-radius: 10px;
+  border: 1px solid;
 }
 
-#caixa_mensagem
+#box_message
 {
   position: absolute;
   width:80%;
@@ -131,7 +133,7 @@ html {
   color:black;
 }
 
-#botao_enviar{
+#submit_button{
   position: absolute;
   left:92%;
   padding-top:15px;

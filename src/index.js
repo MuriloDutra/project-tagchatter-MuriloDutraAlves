@@ -1,8 +1,7 @@
 (function(apiUrl)
 {
   //função que construirá uma div para cada mensagem que foi retornada de '/messages'
-  function buildMessage(json)
-  {
+  function buildMessage(json){
     var panelOfMessages = $("#chatPanel");
 
     var divContent = $("<div>");
@@ -26,7 +25,7 @@
     parrotImage.addClass("parrot");
     parrotImage.attr("name", false);
     parrotImage.click(function(){
-        parrotMessage($(json.id), parrotImage);
+        parrotMessage($(this).parent(), parrotImage);
     });
       
     //atribuindo valor a DIV nome e definindo sua class
@@ -55,16 +54,14 @@
   /*Essa pequena função tem o proposito de pegar a mensagem que o usuario escreveu, 
   e qual usuario a escreveu. Com esses dois valores em mão, eles são passados para a função 
   que propriamente enviara a mensagem, que no caso é a function sendMessage().*/
-  function getValueMessage()
-  {
-    $("#botao_enviar").click(function(){
-      sendMessage($("#caixa_mensagem").val(), sessionStorage.getItem("idUsu"));
-      $("#caixa_mensagem").val('');
+  function getValueMessage(){
+    $("#submit_button").click(function(){
+      sendMessage($("#box_message").val(), sessionStorage.getItem("idUsu"));
+      $("#box_message").val('');
     });
   }
 
-  function fetchParrotsCount() 
-  {
+  function fetchParrotsCount(){
     return fetch(apiUrl + "/messages/parrots-count")
       .then(function(response){
         return response.json();
@@ -74,8 +71,7 @@
       });
   }
 
-  function listMessages() 
-  {
+  function listMessages(){
     // Faz um request para a API de listagem de mensagens
     // Atualiza a o conteúdo da lista de mensagens
     // Deve ser chamado a cada 3 segundos
@@ -96,25 +92,23 @@
     .catch(error => console.log("ERROR: " + error))
   }
 
-  function parrotMessage(message, parrotImg) 
-  {
+  function parrotMessage(message, parrotImg){
+    console.log(message);
     // Faz um request para marcar a mensagem como parrot no servidor
     // Altera a mensagem na lista para que ela apareça como parrot na interface
     var otherParam = {method:"PUT"};
     var url = "";
 
-    if(parrotImg.attr("name") == "false")
-    {
+    if(parrotImg.attr("name") == "false"){
       parrotImg.attr("name", true);
       parrotImg.attr("src", "images/parrot.gif");
-      message.css("background", "#FFFAE7");
+      message.css("background-color", "#FFFAE7");
 
       url = apiUrl + "/messages/" + message.id + "/parrot";
-    }else
-    {
+    }else{
       parrotImg.attr("name", "false");
       parrotImg.attr("src", "images/parrot-grey.png");
-      message.css("background", "#FFFFFF");
+      message.css("background-color", "#FFFFFF");
 
       url = apiUrl + "/messages/" + message.id + "/unparrot";
     }
@@ -126,8 +120,7 @@
       .catch(error => console.log("ERROR: " + error));
   }
   
-  function sendMessage(message, authorId) 
-  {
+  function sendMessage(message, authorId){
     // Manda a mensagem para a API quando o usuário envia a mensagem
     // Caso o request falhe exibe uma mensagem para o usuário utilizando Window.alert ou outro componente visual
     // Se o request for bem sucedido, atualiza o conteúdo da lista de mensagens
@@ -150,24 +143,22 @@
     .catch(error => alert("Ocorreu uma falha no envio da mensagem, tente novamente. Error: " + error))
   }
 
-  function getMe() 
-  {
+  function getMe(){
     // Faz um request para pegar os dados do usuário atual
     // Exibe a foto do usuário atual na tela e armazena o seu ID para quando ele enviar uma mensagem
-    var imagem = $("#imagem_usuario");
+    var image = $("#user_image");
     var otherParam = {method:"GET"};
 
     fetch(apiUrl + "/me", otherParam)
       .then(response => response.json())
       .then(r => {
-        imagem.attr("src",r.avatar);
+        image.attr("src",r.avatar);
         sessionStorage.setItem("idUsu", r.id);
       })
       .catch(error => console.log("ERROR: " + error))
   }
 
-  function initialize() 
-  {
+  function initialize(){
     fetchParrotsCount();
     getMe();
     listMessages();
