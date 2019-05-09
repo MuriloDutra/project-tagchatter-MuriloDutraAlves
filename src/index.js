@@ -16,12 +16,15 @@
     // Deve ser chamado a cada 3 segundos
     const otherParam = {method:"GET"};
 
-    fetch(apiUrl + "/messages", otherParam).then(function(response){
-      return response.json()}).then(function(messages){ 
-      $("#chatPanel").html('');
-      for(i = 0; i < messages.length; i++){
-        buildMessage(messages[i]);
-      }
+    fetch(apiUrl + "/messages", otherParam)
+    .then(function(response){
+      return response.json()
+    })
+    .then(function(messages){ 
+      $("#chatPanel").empty();
+      messages.forEach(message => {
+        buildMessage(message);
+      });
     })
     .catch(error => console.log("ERROR: " + error))
   }
@@ -35,13 +38,13 @@
     if(parrotImg.attr("name") == "false"){
       parrotImg.attr("name", true);
       parrotImg.attr("src", "images/parrot.gif");
-      message.css("background-color", "#FFFAE7");
+      message.toggleClass("parrotOnOff");
 
       url = apiUrl + "/messages/" + message.id + "/parrot";
     }else{
       parrotImg.attr("name", "false");
       parrotImg.attr("src", "images/parrot-grey.png");
-      message.css("background-color", "#FFFFFF");
+      message.toggleClass("parrotOnOff");
 
       url = apiUrl + "/messages/" + message.id + "/unparrot";
     }
@@ -57,7 +60,7 @@
     // Manda a mensagem para a API quando o usuário envia a mensagem
     // Caso o request falhe exibe uma mensagem para o usuário utilizando Window.alert ou outro componente visual
     // Se o request for bem sucedido, atualiza o conteúdo da lista de mensagens
-    
+
     var otherParam = {
       method: "POST",
       headers: {
@@ -71,8 +74,8 @@
     }
 
     fetch(apiUrl + "/messages", otherParam)
-    .then(response => {return(response.json())})
-    .then(resultado => buildMessage(resultado))
+    .then(response => { return(response.json())})
+    .then(resultado => {buildMessage(resultado)})
     .catch(error => alert("Ocorreu uma falha no envio da mensagem, tente novamente. Error: " + error))
   }
 
@@ -106,7 +109,8 @@
     divContent.attr("id", json.id);
 
     //atribuindo valor a imagem do usuario e definindo sua class
-    photo.attr("src", json.author.avatar);
+    var avt = json.author.avatar;
+    photo.attr("src", avt);
     photo.addClass("profilePhoto");
 
     /*definindo a class, src e name para imagem do parrot. Além disso, estou adicionando um evento de click, 
